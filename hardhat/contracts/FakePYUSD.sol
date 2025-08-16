@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-contract Token {
+contract FakePYUSD {
     string public name = "Fake PYUSD";
     string public symbol = "PYUSD";
     uint8 public decimals = 6;
