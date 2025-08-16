@@ -1,0 +1,20 @@
+📋 Deploying contracts with account: 0xCd82aadD990249a933011300aCE5E3859C5bF8bd
+💰 Account balance: 0.05 ETH
+
+📝 Deploying boomerang contract...
+⏳ Waiting for deployment transaction to be mined...
+✅ boomerang deployed to: 0xA7d455cf3CeCF4211589f1Da1Fd486812e9f426D
+
+🔍 Verifying deployment...
+👤 Contract Owner: 0xCd82aadD990249a933011300aCE5E3859C5bF8bd
+🪙 Stake Token Address: 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8
+💵 Stake Amount: 0.1 USDC
+
+📄 DEPLOYMENT SUMMARY:
+========================
+Network: Base Sepolia
+boomerang Contract: 0xA7d455cf3CeCF4211589f1Da1Fd486812e9f426D
+Token Contract: 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8
+Deployer: 0xCd82aadD990249a933011300aCE5E3859C5bF8bd
+Block Number: 9000017
+========================
