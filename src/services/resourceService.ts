@@ -91,7 +91,7 @@ export class ResourceService {
           title: resource.title,
           url: resource.url,
           url_hash: urlHash,
-          description: resource.description || null,
+          description: resource.description || "",
           tags: resource.tags,
           upvotes: 0,
           user_id: userId,

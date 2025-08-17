@@ -136,7 +136,10 @@ export const AddResourceForm = ({
             id="description"
             value={formData.description}
             onChange={(e) =>
-              setFormData((prev) => ({ ...prev, description: e.target.value }))
+              setFormData((prev) => ({
+                ...prev,
+                description: e.target.value || "",
+              }))
             }
             placeholder="Brief description of the resource (optional)..."
             rows={3}

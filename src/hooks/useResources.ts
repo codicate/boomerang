@@ -136,7 +136,11 @@ export const useResources = (userId?: string) => {
         if (!resource) return;
 
         // Check if user is trying to rate their own resource
-        if (resource.user_id && resource.user_id === userId) {
+        if (
+          resource.user_id &&
+          userId &&
+          resource.user_id.toLowerCase() === userId.toLowerCase()
+        ) {
           toast.error("Cannot rate your own resource");
           return;
         }
