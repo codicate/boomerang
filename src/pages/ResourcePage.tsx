@@ -1,12 +1,14 @@
 import { toast } from "sonner";
 import { useResources } from "../hooks/useResources";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 import { ResourceList } from "../components/ResourceList";
 import { Button } from "../components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function ResourcePage() {
-  const { resources, upvoteResource } = useResources();
+  const { userId } = useCurrentUser();
+  const { resources, upvoteResource, isLoading } = useResources(userId);
   const navigate = useNavigate();
 
   const handleTip = (_resourceId: string) => {
@@ -27,11 +29,17 @@ export default function ResourcePage() {
         </div>
 
         {/* Resource List */}
-        <ResourceList
-          resources={resources}
-          onUpvote={upvoteResource}
-          onTip={handleTip}
-        />
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="text-gray-400">Loading resources...</div>
+          </div>
+        ) : (
+          <ResourceList
+            resources={resources}
+            onUpvote={upvoteResource}
+            onTip={handleTip}
+          />
+        )}
 
         {/* Floating Action Button */}
         <Button

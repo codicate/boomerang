@@ -1,13 +1,15 @@
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useResources } from "../hooks/useResources";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 import { AddResourceForm } from "../components/AddResourceForm";
 import { Button } from "../components/ui/button";
 import { ArrowLeft, X } from "lucide-react";
 import { NewResourceInput } from "../types/resource";
 
 export default function AddResourcePage() {
-  const { addResource, isSubmitting } = useResources();
+  const { userId } = useCurrentUser();
+  const { addResource, isSubmitting } = useResources(userId);
   const navigate = useNavigate();
 
   const handleSubmit = async (resource: NewResourceInput) => {

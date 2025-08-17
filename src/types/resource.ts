@@ -7,7 +7,10 @@ export interface Resource {
   tags: string[];
   upvotes: number;
   timestamp: number;
-  hasUserUpvoted?: boolean;
+  created_at?: string; // Supabase timestamp
+  updated_at?: string; // Supabase timestamp
+  user_id?: string; // Creator's user ID
+  hasUserUpvoted?: boolean; // Client-side state for current user
 }
 
 export interface NewResourceInput {
@@ -15,4 +18,26 @@ export interface NewResourceInput {
   url: string;
   description: string;
   tags: string[];
+}
+
+// Database schema type for Supabase
+export interface ResourceRow {
+  id: string;
+  title: string;
+  url: string;
+  url_hash: string;
+  description: string;
+  tags: string[];
+  upvotes: number;
+  created_at: string;
+  updated_at: string;
+  user_id?: string;
+}
+
+// Upvote tracking table
+export interface ResourceUpvote {
+  id: string;
+  resource_id: string;
+  user_id: string;
+  created_at: string;
 }
