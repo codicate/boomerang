@@ -16,6 +16,7 @@ import { useUserStats } from "@/hooks/useUserStats";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useContractStats } from "@/hooks/useContractStats";
 import { useSimulateYield } from "@/hooks/useSimulateYield";
+import { usePayout } from "@/hooks/usePayout";
 import { MetricCard } from "@/components/MetricCard";
 import { ConnectWalletPrompt } from "@/components/ui/connect-wallet-prompt";
 
@@ -26,6 +27,7 @@ export default function ProfilePage() {
     ethBalance,
     usdcBalance,
     isLoading: isLoadingBalances,
+    refetchBalances,
   } = useWalletBalances();
   const { stats, isLoading: isLoadingStats } = useUserStats(userId);
   const {
@@ -36,6 +38,10 @@ export default function ProfilePage() {
     refetchAll,
   } = useContractStats();
   const { simulateYield, isLoading: isSimulatingYield } = useSimulateYield();
+  const { claimPayout, isLoading: isClaimingPayout } = usePayout(() => {
+    refetchBalances();
+    refetchAll();
+  });
 
   if (!isConnected) {
     return <ConnectWalletPrompt variant="wallet" />;
@@ -130,76 +136,6 @@ export default function ProfilePage() {
             </div>
           </Card>
 
-          {/* Community Activity */}
-          <Card className="bg-gray-900 border-gray-800">
-            <div className="p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-green-400" />
-                </div>
-                <h2 className="text-xl font-semibold text-white">
-                  Community Activity
-                </h2>
-              </div>
-
-              {isLoadingStats ? (
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-gray-600 rounded animate-pulse"></div>
-                  <span className="text-gray-400">Loading activity...</span>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <MetricCard
-                      title="Resources Owned"
-                      value={stats.resourcesOwned}
-                      subtitle="Total resources shared"
-                      icon={BarChart3}
-                      iconBgColor="bg-blue-600/20"
-                      iconTextColor="text-blue-400"
-                      gradientFrom="from-blue-600/10"
-                      gradientTo="to-blue-600/5"
-                      borderColor="border-blue-600/20"
-                      isLoading={isLoadingStats}
-                    />
-
-                    <MetricCard
-                      title="Total Votes Cast"
-                      value={stats.totalVotes}
-                      subtitle="Votes across all resources"
-                      icon={MessageSquare}
-                      iconBgColor="bg-green-600/20"
-                      iconTextColor="text-green-400"
-                      gradientFrom="from-green-600/10"
-                      gradientTo="to-green-600/5"
-                      borderColor="border-green-600/20"
-                      isLoading={isLoadingStats}
-                    />
-                  </div>
-
-                  {stats.resourcesOwned === 0 && stats.totalVotes === 0 && (
-                    <div className="p-4 bg-blue-600/10 border border-blue-600/20 rounded-lg">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Zap className="w-4 h-4 text-blue-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-blue-300 mb-1">
-                            Get Started
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            Add resources and vote on others' content to build
-                            your community presence and earn rewards.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </Card>
-
           {/* Contract Stats */}
           <Card className="bg-gray-900 border-gray-800">
             <div className="p-6">
@@ -278,7 +214,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-yellow-300">
-                            Debug Mode
+                            Admin
                           </p>
                         </div>
                       </div>
@@ -302,6 +238,107 @@ export default function ProfilePage() {
                       </Button>
                     </div>
                   </div>
+                </div>
+              )}
+            </div>
+          </Card>
+
+          {/* Community Activity */}
+          <Card className="bg-gray-900 border-gray-800">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-green-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-white">
+                  Community Activity
+                </h2>
+              </div>
+
+              {isLoadingStats ? (
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-gray-600 rounded animate-pulse"></div>
+                  <span className="text-gray-400">Loading activity...</span>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <MetricCard
+                      title="Resources Owned"
+                      value={stats.resourcesOwned}
+                      subtitle="Total resources shared"
+                      icon={BarChart3}
+                      iconBgColor="bg-blue-600/20"
+                      iconTextColor="text-blue-400"
+                      gradientFrom="from-blue-600/10"
+                      gradientTo="to-blue-600/5"
+                      borderColor="border-blue-600/20"
+                      isLoading={isLoadingStats}
+                    />
+
+                    <MetricCard
+                      title="Total Votes Cast"
+                      value={stats.totalVotes}
+                      subtitle="Votes across all resources"
+                      icon={MessageSquare}
+                      iconBgColor="bg-green-600/20"
+                      iconTextColor="text-green-400"
+                      gradientFrom="from-green-600/10"
+                      gradientTo="to-green-600/5"
+                      borderColor="border-green-600/20"
+                      isLoading={isLoadingStats}
+                    />
+                  </div>
+
+                  {/* Payout Button */}
+                  <div className="p-4 bg-green-600/10 border border-green-600/20 rounded-lg">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Coins className="w-4 h-4 text-green-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-green-300">
+                            Claim Rewards
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={claimPayout}
+                        disabled={isClaimingPayout}
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700 text-white font-medium whitespace-nowrap"
+                      >
+                        {isClaimingPayout ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin"></div>
+                            Claiming...
+                          </div>
+                        ) : (
+                          "Claim Payout"
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {stats.resourcesOwned === 0 && stats.totalVotes === 0 && (
+                    <div className="p-4 bg-blue-600/10 border border-blue-600/20 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Zap className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-blue-300 mb-1">
+                            Get Started
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            Add resources and vote on others' content to build
+                            your community presence and earn rewards.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
