@@ -10,29 +10,19 @@ import { PageHeader } from "./ui/page-header";
 const mockCommunities: Community[] = [
   {
     id: "1",
-    name: "Web3 Developers",
-    description:
-      "A community for Web3 developers to share knowledge and collaborate on projects.",
+    name: "2026 New Grad Jobs",
+    description: "A collection of jobs for 2026 new grads",
     imageUrl:
       "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800",
-    stakeFee: 100,
+    stakeFee: 10,
   },
   {
     id: "2",
-    name: "DeFi Traders",
-    description:
-      "Advanced DeFi trading strategies and alpha sharing community.",
+    name: "Uber Eats Coupon",
+    description: "We share the latest Uber Eats or Postmates coupons",
     imageUrl:
-      "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800",
-    stakeFee: 250,
-  },
-  {
-    id: "3",
-    name: "NFT Artists",
-    description: "Creative community for NFT artists and collectors.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800",
-    stakeFee: 75,
+      "https://www.jotform.com/blog/wp-content/uploads/2020/04/ubereats-alternatives.jpg",
+    stakeFee: 20,
   },
 ];
 

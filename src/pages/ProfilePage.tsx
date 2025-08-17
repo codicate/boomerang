@@ -19,6 +19,7 @@ import { useSimulateYield } from "@/hooks/useSimulateYield";
 import { usePayout } from "@/hooks/usePayout";
 import { MetricCard } from "@/components/MetricCard";
 import { ConnectWalletPrompt } from "@/components/ui/connect-wallet-prompt";
+import { PageHeader } from "@/components/ui/page-header";
 
 export default function ProfilePage() {
   const { address, isConnected } = useAccount();
@@ -50,7 +51,12 @@ export default function ProfilePage() {
   return (
     <div className="min-h-full bg-black text-white">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-8">Profile</h1>
+        <PageHeader
+          title="Profile"
+          icon={Wallet}
+          iconBgColor="bg-blue-600/20"
+          iconTextColor="text-blue-400"
+        />
 
         <div className="space-y-6">
           {/* Wallet Info */}

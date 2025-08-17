@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
 import { useAccount, useBalance } from "wagmi";
-
-// Base Sepolia USDC contract address
-const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e" as const;
+import { useUSDCAddress } from "./useCommunityStaking";
 
 export const useWalletBalances = () => {
   const { address, isConnected } = useAccount();
+  const USDC_ADDRESS = useUSDCAddress();
+  console.log(USDC_ADDRESS);
 
   // Get ETH balance
   const {

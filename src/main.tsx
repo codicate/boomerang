@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createConfig, http } from "wagmi";
 import { WagmiProvider } from "wagmi";
-import { baseSepolia } from "wagmi/chains";
+import { baseSepolia, sepolia } from "wagmi/chains";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
@@ -13,10 +13,11 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 const config = createConfig({
-  chains: [baseSepolia],
+  chains: [baseSepolia, sepolia],
   multiInjectedProviderDiscovery: false,
   transports: {
     [baseSepolia.id]: http(),
+    [sepolia.id]: http(),
   },
 });
 

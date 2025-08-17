@@ -1,5 +1,6 @@
 import { Wallet, Users } from "lucide-react";
 import { Card } from "./card";
+import { PageHeader } from "./page-header";
 
 interface ConnectWalletPromptProps {
   variant?: "wallet" | "community";
@@ -36,9 +37,17 @@ export function ConnectWalletPrompt({
   return (
     <div className="min-h-full bg-black text-white">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-8">
-          {variant === "wallet" ? "Profile" : "Resources"}
-        </h1>
+        <PageHeader
+          title={variant === "wallet" ? "Profile" : "Resources"}
+          subtitle={
+            variant === "wallet"
+              ? "Please connect your wallet to view your profile, balances, and community activity."
+              : "Please join a community to view and contribute resources."
+          }
+          icon={variant === "wallet" ? Wallet : Users}
+          iconBgColor="bg-blue-600/20"
+          iconTextColor="text-blue-400"
+        />
         <Card className="bg-gray-900 border-gray-800 p-8 text-center">
           <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
             {displayIcon}
