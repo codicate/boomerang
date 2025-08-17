@@ -29,7 +29,7 @@ function Footer() {
   }
 
   return (
-    <footer className="bg-black border-t border-gray-800 px-4 py-3 ">
+    <footer className="bg-black border-t border-gray-800 px-4 py-3 flex-shrink-0">
       <div className="flex justify-around items-center max-w-md mx-auto">
         {navItems.map((item) => {
           const IconComponent = item.icon;
@@ -58,17 +58,16 @@ function App() {
   const isAddResourcePage = location.pathname === "/resource/add";
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="h-screen bg-black flex flex-col overflow-hidden">
       {!isAddResourcePage && (
-        <header className="bg-black border-b border-gray-800 p-4">
+        <header className="bg-black border-b border-gray-800 p-4 flex-shrink-0">
           <div className="flex justify-end">
             <DynamicWidget />
           </div>
         </header>
       )}
 
-      {/* Main content */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden">
         <Routes>
           <Route path="/" element={<CommunityDemo />} />
           <Route path="/resource" element={<ResourcePage />} />

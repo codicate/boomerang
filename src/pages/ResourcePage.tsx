@@ -18,7 +18,7 @@ export default function ResourcePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-full bg-black text-white relative">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {isLoading ? (
           <div className="text-center py-12">
