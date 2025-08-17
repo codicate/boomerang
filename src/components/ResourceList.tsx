@@ -5,12 +5,14 @@ interface ResourceListProps {
   resources: Resource[];
   onUpvote: (resourceId: string) => void;
   onTip?: (resourceId: string) => void;
+  currentUserId?: string;
 }
 
 export const ResourceList = ({
   resources,
   onUpvote,
   onTip,
+  currentUserId,
 }: ResourceListProps) => {
   if (resources.length === 0) {
     return (
@@ -39,6 +41,7 @@ export const ResourceList = ({
             resource={resource}
             onUpvote={onUpvote}
             onTip={onTip}
+            currentUserId={currentUserId}
           />
         ))}
       </div>

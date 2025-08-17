@@ -5,6 +5,7 @@ interface ResourceCardProps {
   resource: Resource;
   onUpvote: (resourceId: string) => void;
   onTip?: (resourceId: string) => void;
+  currentUserId?: string;
 }
 
 const formatTimeAgo = (timestamp: number): string => {
@@ -36,10 +37,18 @@ export const ResourceCard = ({
   resource,
   onUpvote,
   onTip,
+  currentUserId,
 }: ResourceCardProps) => {
+  const isOwner = currentUserId && resource.user_id === currentUserId;
+
   const handleLinkClick = (e: React.MouseEvent) => {
     // Prevent upvote when clicking the link
     e.stopPropagation();
+  };
+
+  const handleUpvote = () => {
+    if (isOwner) return; // Prevent self-upvoting
+    onUpvote(resource.id);
   };
 
   return (
@@ -102,9 +111,13 @@ export const ResourceCard = ({
         <div className="flex items-center gap-3">
           {/* Upvote Button */}
           <Button
-            onClick={() => onUpvote(resource.id)}
+            onClick={handleUpvote}
+            disabled={!!isOwner}
+            title={isOwner ? "Cannot rate your own resource" : undefined}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-              resource.hasUserUpvoted
+              isOwner
+                ? "bg-gray-700 text-gray-500 cursor-not-allowed opacity-50"
+                : resource.hasUserUpvoted
                 ? "bg-orange-600 hover:bg-orange-700 text-white"
                 : "bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700"
             }`}

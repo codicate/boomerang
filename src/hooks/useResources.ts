@@ -135,6 +135,12 @@ export const useResources = (userId?: string) => {
         const resource = resources.find((r) => r.id === resourceId);
         if (!resource) return;
 
+        // Check if user is trying to rate their own resource
+        if (resource.user_id && resource.user_id === userId) {
+          toast.error("Cannot rate your own resource");
+          return;
+        }
+
         // Optimistically update UI
         setResources((prev) =>
           prev.map((r) => {

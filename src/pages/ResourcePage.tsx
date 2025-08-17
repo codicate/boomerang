@@ -39,6 +39,7 @@ export default function ResourcePage() {
             resources={resources}
             onUpvote={upvoteResource}
             onTip={handleTip}
+            currentUserId={userId}
           />
         )}
 
