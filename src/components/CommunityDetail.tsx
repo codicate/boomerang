@@ -7,6 +7,7 @@ import { StepIndicator } from "@/components/ui/step-indicator";
 import { useCommunityStaking } from "@/hooks/useCommunityStaking";
 import { formatPYUSD } from "@/lib/currency";
 import { Community } from "./CommunityCard";
+import { useNavigate } from "react-router-dom";
 
 interface CommunityDetailProps {
   community: Community;
@@ -14,11 +15,8 @@ interface CommunityDetailProps {
   onBack: () => void;
 }
 
-export function CommunityDetail({
-  community,
-  onGoToCommunity,
-  onBack,
-}: CommunityDetailProps) {
+export function CommunityDetail({ community, onBack }: CommunityDetailProps) {
+  const navigate = useNavigate();
   const {
     startStaking,
     isApproving,
@@ -152,7 +150,7 @@ export function CommunityDetail({
                   all community features.
                 </p>
                 <Button
-                  onClick={onGoToCommunity}
+                  onClick={() => navigate("/resource")}
                   className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 text-lg"
                 >
                   Go to Community

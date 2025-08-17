@@ -284,7 +284,7 @@ export default function ProfilePage() {
                       </div>
                       <Button
                         onClick={() => {
-                          simulateYield("1");
+                          simulateYield();
                           setTimeout(() => refetchAll(), 3000);
                         }}
                         disabled={isSimulatingYield}
@@ -297,7 +297,7 @@ export default function ProfilePage() {
                             Generating...
                           </div>
                         ) : (
-                          "Generate 1 USDC"
+                          "Generate 0.1 USDC"
                         )}
                       </Button>
                     </div>

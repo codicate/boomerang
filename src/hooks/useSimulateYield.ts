@@ -44,7 +44,8 @@ export const useSimulateYield = () => {
     }
   }, [simulateError]);
 
-  const simulateYield = async (yieldAmount: string = "1") => {
+  const simulateYield = async () => {
+    const yieldAmount = "0.1";
     if (!address) {
       toast.error("Please connect your wallet");
       return;
