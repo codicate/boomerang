@@ -3,7 +3,7 @@ export interface Resource {
   title: string;
   url: string;
   urlHash: string; // Auto-generated hash for uniqueness
-  description: string;
+  description?: string;
   tags: string[];
   upvotes: number;
   timestamp: number;
@@ -16,7 +16,7 @@ export interface Resource {
 export interface NewResourceInput {
   title: string;
   url: string;
-  description: string;
+  description?: string;
   tags: string[];
 }
 
@@ -26,7 +26,7 @@ export interface ResourceRow {
   title: string;
   url: string;
   url_hash: string;
-  description: string;
+  description: string | null;
   tags: string[];
   upvotes: number;
   created_at: string;

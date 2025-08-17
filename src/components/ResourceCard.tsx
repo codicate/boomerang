@@ -93,9 +93,11 @@ export const ResourceCard = ({
       </div>
 
       {/* Description */}
-      <p className="text-gray-300 text-sm mb-3 line-clamp-3">
-        {resource.description}
-      </p>
+      {resource.description && (
+        <p className="text-gray-300 text-sm mb-3 line-clamp-3">
+          {resource.description}
+        </p>
+      )}
 
       {/* Owner */}
       {resource.user_id && (

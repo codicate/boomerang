@@ -29,11 +29,7 @@ export const AddResourceForm = ({
     setSuccess(false);
 
     // Basic validation
-    if (
-      !formData.title.trim() ||
-      !formData.url.trim() ||
-      !formData.description.trim()
-    ) {
+    if (!formData.title.trim() || !formData.url.trim()) {
       setError("Please fill in all required fields");
       return;
     }
@@ -134,7 +130,7 @@ export const AddResourceForm = ({
             htmlFor="description"
             className="block text-sm font-medium text-gray-300 mb-2"
           >
-            Description *
+            Description
           </label>
           <textarea
             id="description"
@@ -142,7 +138,7 @@ export const AddResourceForm = ({
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, description: e.target.value }))
             }
-            placeholder="Brief description of the resource..."
+            placeholder="Brief description of the resource (optional)..."
             rows={3}
             className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors resize-none"
             disabled={isSubmitting}
