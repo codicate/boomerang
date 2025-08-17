@@ -18,18 +18,8 @@ export default function ResourcePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white relative">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Resource Hub</h1>
-          <p className="text-gray-400">
-            Share and discover time-sensitive opportunities, discounts, and
-            valuable resources
-          </p>
-        </div>
-
-        {/* Resource List */}
         {isLoading ? (
           <div className="text-center py-12">
             <div className="text-gray-400">Loading resources...</div>
@@ -51,14 +41,12 @@ export default function ResourcePage() {
                 ? navigate("/resource/add")
                 : toast.error("You must stake before adding resources")
             }
-            className={`fixed bottom-24 right-6 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-200 z-40 ${
-              hasStaked
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-gray-600 hover:bg-gray-700"
+            size="icon"
+            className={`absolute bottom-5 right-5 text-white z-999 size-12 ${
+              hasStaked ? "bg-blue-600" : "bg-gray-600"
             }`}
-            size="lg"
           >
-            <Plus className="w-6 h-6" />
+            <Plus />
           </Button>
         )}
       </div>
