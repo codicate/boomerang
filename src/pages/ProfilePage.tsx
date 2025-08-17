@@ -289,16 +289,13 @@ export default function ProfilePage() {
 
                   <div className="p-4 bg-yellow-600/10 border border-yellow-600/20 rounded-lg">
                     <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-yellow-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
                           <Zap className="w-4 h-4 text-yellow-400" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-yellow-300 mb-1">
+                          <p className="text-sm font-medium text-yellow-300">
                             Debug Mode
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            Generate fake yield for testing (owner only)
                           </p>
                         </div>
                       </div>

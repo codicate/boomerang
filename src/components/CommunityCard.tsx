@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatPYUSD } from "@/lib/currency";
 
 // Define the Community interface
@@ -26,8 +26,8 @@ export function CommunityCard({
   };
 
   return (
-    <Card
-      className="cursor-pointer hover:bg-gray-800 transition-colors bg-gray-900 border-gray-700 overflow-hidden"
+    <div
+      className="transition-colors bg-gray-900 border-gray-800 overflow-hidden rounded-lg"
       onClick={handleCardClick}
     >
       {community.imageUrl && (
@@ -38,15 +38,15 @@ export function CommunityCard({
         />
       )}
 
-      <CardContent className="p-6">
-        <h3 className="text-xl font-semibold text-white mb-2">
-          {community.name}
-        </h3>
-        <p className="text-gray-400 text-sm mb-4">{community.description}</p>
+      <CardContent className="p-6 flex flex-col justify-between gap-2">
+        <h3 className="text-xl font-semibold text-white">{community.name}</h3>
+        <p className="text-gray-400 text-sm line-clamp-3">
+          {community.description}
+        </p>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
           <div className="flex items-center text-sm">
-            <span className="text-gray-500 font-medium">Stake Fee:</span>
+            <span className="text-gray-400 font-medium">Stake Fee:</span>
             <span className="ml-2 text-lg font-semibold text-green-400">
               {formatPYUSD(community.stakeFee)}
             </span>
@@ -55,14 +55,6 @@ export function CommunityCard({
           <ArrowRight className="w-5 h-5 text-blue-400" />
         </div>
       </CardContent>
-
-      <CardFooter className="pt-0">
-        <div className="w-full text-center">
-          <div className="text-sm text-blue-400 font-medium">
-            Click to join community
-          </div>
-        </div>
-      </CardFooter>
-    </Card>
+    </div>
   );
 }

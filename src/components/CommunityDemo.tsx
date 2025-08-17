@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { Users } from "lucide-react";
 
 import { CommunityCard, Community } from "./CommunityCard";
 import { CommunityDetail } from "./CommunityDetail";
+import { PageLayout } from "./ui/page-layout";
+import { PageHeader } from "./ui/page-header";
 
 // Mock communities data
 const mockCommunities: Community[] = [
@@ -68,26 +71,25 @@ export function CommunityDemo() {
   }
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Communities</h1>
-          <p className="text-gray-400">
-            Choose a community to join and start earning rewards
-          </p>
-        </div>
+    <PageLayout maxWidth="6xl">
+      <PageHeader
+        title="Communities"
+        subtitle="Choose a community to join and start earning rewards"
+        icon={Users}
+        iconBgColor="bg-blue-600/20"
+        iconTextColor="text-blue-400"
+      />
 
-        {/* Communities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockCommunities.map((community) => (
-            <CommunityCard
-              key={community.id}
-              community={community}
-              onJoinCommunity={handleJoinCommunity}
-            />
-          ))}
-        </div>
+      {/* Communities Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {mockCommunities.map((community) => (
+          <CommunityCard
+            key={community.id}
+            community={community}
+            onJoinCommunity={handleJoinCommunity}
+          />
+        ))}
       </div>
-    </div>
+    </PageLayout>
   );
 }
