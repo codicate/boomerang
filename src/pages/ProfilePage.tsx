@@ -1,6 +1,16 @@
 import { useAccount } from "wagmi";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import {
+  Wallet,
+  TrendingUp,
+  BarChart3,
+  Coins,
+  Zap,
+  MessageSquare,
+  Copy,
+} from "lucide-react";
 import { useWalletBalances } from "@/hooks/useWalletBalances";
 import { useUserStats } from "@/hooks/useUserStats";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -27,15 +37,19 @@ export default function ProfilePage() {
 
   if (!isConnected) {
     return (
-      <div className="container mx-auto px-4 py-6">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-3xl font-bold text-white mb-6">Profile</h1>
-          <Card className="p-6 text-center">
-            <div className="text-4xl mb-4">🔌</div>
-            <h2 className="text-xl font-semibold mb-2">Connect Your Wallet</h2>
-            <p className="text-gray-600">
-              Please connect your wallet to view your profile and staking
-              status.
+      <div className="min-h-full bg-black text-white">
+        <div className="container mx-auto px-4 py-6 max-w-4xl">
+          <h1 className="text-3xl font-bold mb-8">Profile</h1>
+          <Card className="bg-gray-900 border-gray-800 p-8 text-center">
+            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Wallet className="w-8 h-8 text-gray-400" />
+            </div>
+            <h2 className="text-xl font-semibold text-white mb-3">
+              Connect Your Wallet
+            </h2>
+            <p className="text-gray-400 max-w-md mx-auto">
+              Please connect your wallet to view your profile, balances, and
+              community activity.
             </p>
           </Card>
         </div>
@@ -44,163 +58,290 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-white mb-6">Profile</h1>
+    <div className="min-h-full bg-black text-white">
+      <div className="container mx-auto px-4 py-6 max-w-4xl">
+        <h1 className="text-3xl font-bold mb-8">Profile</h1>
 
-        {/* Wallet Info */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Wallet Information</h2>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Address:</span>
-              <span className="font-mono text-sm">
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </span>
+        <div className="space-y-6">
+          {/* Wallet Info */}
+          <Card className="bg-gray-900 border-gray-800">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-blue-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-white">
+                  Wallet Information
+                </h2>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span className="text-gray-300">Address</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-sm text-white">
+                      {address?.slice(0, 6)}...{address?.slice(-4)}
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-gray-400 hover:text-white"
+                      onClick={() => {
+                        if (address) {
+                          navigator.clipboard.writeText(address);
+                          toast.success("Address copied to clipboard!");
+                        }
+                      }}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-gray-800/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-300">
+                          Ξ
+                        </span>
+                      </div>
+                      <span className="text-gray-400 text-sm">ETH Balance</span>
+                    </div>
+                    {isLoadingBalances ? (
+                      <div className="w-6 h-6 bg-gray-600 rounded animate-pulse"></div>
+                    ) : (
+                      <div className="text-lg font-semibold text-white">
+                        {ethBalance
+                          ? `${parseFloat(ethBalance.formatted).toFixed(4)}`
+                          : "0.0000"}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-4 bg-gray-800/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-blue-600/20 rounded-full flex items-center justify-center">
+                        <Coins className="w-3 h-3 text-blue-400" />
+                      </div>
+                      <span className="text-gray-400 text-sm">
+                        USDC Balance
+                      </span>
+                    </div>
+                    {isLoadingBalances ? (
+                      <div className="w-6 h-6 bg-gray-600 rounded animate-pulse"></div>
+                    ) : (
+                      <div className="text-lg font-semibold text-white">
+                        {usdcBalance
+                          ? `${parseFloat(usdcBalance.formatted).toFixed(2)}`
+                          : "0.00"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Status:</span>
-              <span className="text-green-600 font-medium">Connected</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">ETH Balance:</span>
-              {isLoadingBalances ? (
-                <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
+          </Card>
+
+          {/* Community Activity */}
+          <Card className="bg-gray-900 border-gray-800">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-green-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-white">
+                  Community Activity
+                </h2>
+              </div>
+
+              {isLoadingStats ? (
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-gray-600 rounded animate-pulse"></div>
+                  <span className="text-gray-400">Loading activity...</span>
+                </div>
               ) : (
-                <span className="font-medium">
-                  {ethBalance
-                    ? `${parseFloat(ethBalance.formatted).toFixed(4)} ${
-                        ethBalance.symbol
-                      }`
-                    : "0 ETH"}
-                </span>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-6 bg-gradient-to-br from-blue-600/10 to-blue-600/5 border border-blue-600/20 rounded-lg">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                          <BarChart3 className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-gray-300 text-sm font-medium">
+                          Resources Owned
+                        </span>
+                      </div>
+                      <div className="text-3xl font-bold text-white mb-1">
+                        {stats.resourcesOwned}
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Total resources shared
+                      </p>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-green-600/10 to-green-600/5 border border-green-600/20 rounded-lg">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
+                          <MessageSquare className="w-4 h-4 text-green-400" />
+                        </div>
+                        <span className="text-gray-300 text-sm font-medium">
+                          Total Votes Cast
+                        </span>
+                      </div>
+                      <div className="text-3xl font-bold text-white mb-1">
+                        {stats.totalVotes}
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Votes across all resources
+                      </p>
+                    </div>
+                  </div>
+
+                  {stats.resourcesOwned === 0 && stats.totalVotes === 0 && (
+                    <div className="p-4 bg-blue-600/10 border border-blue-600/20 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Zap className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-blue-300 mb-1">
+                            Get Started
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            Add resources and vote on others' content to build
+                            your community presence and earn rewards.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">USDC Balance:</span>
-              {isLoadingBalances ? (
-                <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
+          </Card>
+
+          {/* Contract Stats */}
+          <Card className="bg-gray-900 border-gray-800">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-purple-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-white">
+                  Contract Statistics
+                </h2>
+              </div>
+
+              {isLoadingContract ? (
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-gray-600 rounded animate-pulse"></div>
+                  <span className="text-gray-400">
+                    Loading contract data...
+                  </span>
+                </div>
               ) : (
-                <span className="font-medium">
-                  {usdcBalance
-                    ? `${parseFloat(usdcBalance.formatted).toFixed(2)} ${
-                        usdcBalance.symbol
-                      }`
-                    : "0 USDC"}
-                </span>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-6 bg-gradient-to-br from-purple-600/10 to-purple-600/5 border border-purple-600/20 rounded-lg">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                          <Coins className="w-4 h-4 text-purple-400" />
+                        </div>
+                        <span className="text-gray-300 text-sm font-medium">
+                          Principal Balance
+                        </span>
+                      </div>
+                      <div className="text-2xl font-bold text-white mb-1">
+                        {totalPrincipal
+                          ? `${parseFloat(totalPrincipal.formatted).toFixed(2)}`
+                          : "0.00"}
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        USDC staked in contract
+                      </p>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-green-600/10 to-green-600/5 border border-green-600/20 rounded-lg">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
+                          <TrendingUp className="w-4 h-4 text-green-400" />
+                        </div>
+                        <span className="text-gray-300 text-sm font-medium">
+                          Total Yield
+                        </span>
+                      </div>
+                      <div className="text-2xl font-bold text-white mb-1">
+                        {totalYield
+                          ? `${parseFloat(totalYield.formatted).toFixed(2)}`
+                          : "0.00"}
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        USDC yield generated
+                      </p>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-orange-600/10 to-orange-600/5 border border-orange-600/20 rounded-lg">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                          <MessageSquare className="w-4 h-4 text-orange-400" />
+                        </div>
+                        <span className="text-gray-300 text-sm font-medium">
+                          Total Votes
+                        </span>
+                      </div>
+                      <div className="text-2xl font-bold text-white mb-1">
+                        {totalVotes}
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        Votes across all resources
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-yellow-600/10 border border-yellow-600/20 rounded-lg">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 bg-yellow-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Zap className="w-4 h-4 text-yellow-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-yellow-300 mb-1">
+                            Debug Mode
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            Generate fake yield for testing (owner only)
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          simulateYield("1");
+                          setTimeout(() => refetchAll(), 3000);
+                        }}
+                        disabled={isSimulatingYield}
+                        size="sm"
+                        className="bg-yellow-600 hover:bg-yellow-700 text-black font-medium whitespace-nowrap"
+                      >
+                        {isSimulatingYield ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin"></div>
+                            Generating...
+                          </div>
+                        ) : (
+                          "Generate 1 USDC"
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
-          </div>
-        </Card>
-
-        {/* Community Activity */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Community Activity</h2>
-
-          {isLoadingStats ? (
-            <div className="flex items-center space-x-3">
-              <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
-              <span className="text-gray-600">Loading activity...</span>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {stats.resourcesOwned}
-                  </div>
-                  <div className="text-sm text-gray-600">Resources Owned</div>
-                </div>
-                <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
-                    {stats.totalVotes}
-                  </div>
-                  <div className="text-sm text-gray-600">Total Votes Cast</div>
-                </div>
-              </div>
-
-              {stats.resourcesOwned === 0 && stats.totalVotes === 0 && (
-                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    🚀 <strong>Get Started:</strong> Add resources and vote on
-                    others' content to build your community presence.
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-        </Card>
-
-        {/* Contract Stats */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Contract Statistics</h2>
-
-          {isLoadingContract ? (
-            <div className="flex items-center space-x-3">
-              <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
-              <span className="text-gray-600">Loading contract data...</span>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-purple-50 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
-                    {totalPrincipal
-                      ? `${parseFloat(totalPrincipal.formatted).toFixed(2)}`
-                      : "0"}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Principal Balance (USDC)
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
-                    {totalYield
-                      ? `${parseFloat(totalYield.formatted).toFixed(2)}`
-                      : "0"}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Total Yield (USDC)
-                  </div>
-                </div>
-                <div className="text-center p-4 bg-orange-50 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-600">
-                    {totalVotes}
-                  </div>
-                  <div className="text-sm text-gray-600">Total Votes</div>
-                </div>
-              </div>
-
-              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-yellow-800 font-medium">
-                      🧪 <strong>Debug:</strong> Generate fake yield for testing
-                    </p>
-                    <p className="text-xs text-yellow-700 mt-1">
-                      Only works if you're the contract owner
-                    </p>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      simulateYield("1");
-                      // Refresh stats after a delay to show updated values
-                      setTimeout(() => refetchAll(), 3000);
-                    }}
-                    disabled={isSimulatingYield}
-                    size="sm"
-                    variant="outline"
-                    className="ml-4"
-                  >
-                    {isSimulatingYield
-                      ? "Generating..."
-                      : "Generate 1 USDC Yield"}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </Card>
+          </Card>
+        </div>
       </div>
     </div>
   );
