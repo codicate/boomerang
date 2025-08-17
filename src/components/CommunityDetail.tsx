@@ -1,8 +1,9 @@
-import { useCommunityStaking } from "@/hooks/useCommunityStaking";
-import { formatPYUSD } from "@/lib/currency";
 import { CheckCircle, Circle, ArrowRight, ArrowLeft } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useCommunityStaking } from "@/hooks/useCommunityStaking";
+import { formatPYUSD } from "@/lib/currency";
 import { Community } from "./CommunityCard";
 
 interface CommunityDetailProps {
@@ -33,50 +34,45 @@ export function CommunityDetail({
   const bothStepsCompleted = isStep1Completed && isStep2Completed;
 
   return (
-    <div className="min-h-screen    py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header with back button */}
         <div className="mb-8">
           <button
             onClick={onBack}
-            className="text-blue-400 hover:text-blue-300 mb-6 flex items-center transition-colors duration-200 group"
+            className="text-blue-400 hover:text-blue-300 mb-6 flex items-center transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-4 h-4 mr-2" />
             Back to communities
           </button>
-          <h1 className="text-4xl font-bold text-white mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-white mb-3">
             Join {community.name}
           </h1>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-gray-400 text-lg">
             Complete the steps below to join this community and start earning
             rewards
           </p>
         </div>
 
         {/* Community Info Card */}
-        <Card className="border-zinc-800 bg-zinc-900/50 backdrop-blur-sm mb-8 shadow-2xl shadow-blue-500/10">
-          <CardContent className="p-8">
-            <div className="flex items-start space-x-8">
+        <Card className="bg-gray-900 border-gray-700 mb-8">
+          <CardContent className="p-6">
+            <div className="flex items-start space-x-6">
               {community.imageUrl && (
-                <div className="relative">
-                  <img
-                    src={community.imageUrl}
-                    alt={community.name}
-                    className="w-32 h-32 rounded-2xl object-cover ring-2 ring-blue-500/20"
-                  />
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-blue-500/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                </div>
+                <img
+                  src={community.imageUrl}
+                  alt={community.name}
+                  className="w-24 h-24 rounded-lg object-cover"
+                />
               )}
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-white mb-3">
+                <h2 className="text-xl font-semibold text-white mb-2">
                   {community.name}
                 </h2>
-                <p className="text-zinc-300 text-lg leading-relaxed mb-6">
-                  {community.description}
-                </p>
-                <div className="flex items-center text-sm">
-                  <span className="text-zinc-400 font-medium">Stake Fee:</span>
-                  <span className="ml-3 text-2xl font-bold text-green-400">
+                <p className="text-gray-400 mb-4">{community.description}</p>
+                <div className="flex items-center text-sm text-gray-400">
+                  <span className="font-medium">Stake Fee:</span>
+                  <span className="ml-2 text-lg font-semibold text-green-400">
                     {formatPYUSD(community.stakeFee)}
                   </span>
                 </div>
@@ -86,37 +82,37 @@ export function CommunityDetail({
         </Card>
 
         {/* Two-Step Process */}
-        <Card className="border-zinc-800 bg-zinc-900/50 backdrop-blur-sm shadow-2xl shadow-blue-500/10">
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl font-bold text-white">
+        <Card className="bg-gray-900 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold text-white">
               Join Process
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-8 pt-0">
+          <CardContent>
             {/* Step 1: Approve USDC */}
-            <div className="mb-10">
-              <div className="flex items-center mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 mr-4 ring-2 ring-blue-500/30">
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-900 mr-3">
                   {isStep1Completed ? (
-                    <CheckCircle className="w-6 h-6 text-blue-400" />
+                    <CheckCircle className="w-5 h-5 text-blue-400" />
                   ) : (
-                    <Circle className="w-6 h-6 text-blue-400" />
+                    <Circle className="w-5 h-5 text-blue-400" />
                   )}
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-white">
+                  <h4 className="text-lg font-medium text-white">
                     Step 1: Approve USDC Spending
                   </h4>
                   {isStep1Completed && (
                     <span className="text-sm text-green-400 font-medium">
-                      ✓ Completed
+                      Completed
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="ml-16">
-                <p className="text-zinc-300 mb-6 text-lg">
+              <div className="ml-11">
+                <p className="text-gray-400 mb-4">
                   Allow the Boomerang contract to spend your USDC tokens for
                   staking.
                 </p>
@@ -125,7 +121,7 @@ export function CommunityDetail({
                   <Button
                     onClick={handleApprove}
                     disabled={isApproving}
-                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 text-lg font-semibold shadow-lg shadow-blue-500/25 transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/40"
+                    className="bg-blue-500 hover:bg-blue-600 text-white"
                   >
                     {isApproving ? "Approving..." : "Approve USDC"}
                   </Button>
@@ -134,38 +130,38 @@ export function CommunityDetail({
             </div>
 
             {/* Step 2: Stake */}
-            <div className="mb-10">
-              <div className="flex items-center mb-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20 mr-4 ring-2 ring-green-500/30">
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-900 mr-3">
                   {isStep2Completed ? (
-                    <CheckCircle className="w-6 h-6 text-green-400" />
+                    <CheckCircle className="w-5 h-5 text-green-400" />
                   ) : (
-                    <Circle className="w-6 h-6 text-green-400" />
+                    <Circle className="w-5 h-5 text-green-400" />
                   )}
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-white">
+                  <h4 className="text-lg font-medium text-white">
                     Step 2: Stake USDC
                   </h4>
                   {isStep2Completed && (
                     <span className="text-sm text-green-400 font-medium">
-                      ✓ Completed
+                      Completed
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="ml-16">
-                <p className="text-zinc-300 mb-6 text-lg">
+              <div className="ml-11">
+                <p className="text-gray-400 mb-4">
                   Stake your USDC to join the community and start earning
                   rewards.
                 </p>
 
                 {isStep1Completed && !isStep2Completed && (
-                  <div className="text-sm text-zinc-400 bg-zinc-800/50 p-4 rounded-lg border border-zinc-700">
+                  <div className="text-sm text-gray-400">
                     {isStaking
-                      ? "🔄 Staking in progress..."
-                      : "⏳ Staking will begin automatically..."}
+                      ? "Staking in progress..."
+                      : "Staking will begin automatically..."}
                   </div>
                 )}
               </div>
@@ -173,24 +169,24 @@ export function CommunityDetail({
 
             {/* Success State */}
             {bothStepsCompleted && (
-              <div className="border-t border-zinc-700 pt-8">
+              <div className="border-t pt-6">
                 <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-500/20 mb-6 ring-4 ring-green-500/30">
-                    <CheckCircle className="w-10 h-10 text-green-400" />
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-900 mb-4">
+                    <CheckCircle className="w-8 h-8 text-green-400" />
                   </div>
-                  <h4 className="text-2xl font-bold text-white mb-3">
+                  <h4 className="text-xl font-semibold text-white mb-2">
                     Welcome to {community.name}!
                   </h4>
-                  <p className="text-zinc-300 mb-8 text-lg max-w-md mx-auto">
+                  <p className="text-gray-400 mb-6">
                     You have successfully joined the community. You can now
                     access all community features.
                   </p>
                   <Button
                     onClick={onGoToCommunity}
-                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-10 py-4 text-xl font-bold shadow-2xl shadow-green-500/25 transition-all duration-200 hover:shadow-2xl hover:shadow-green-500/40 hover:scale-105"
+                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 text-lg"
                   >
                     Go to Community
-                    <ArrowRight className="w-6 h-6 ml-3" />
+                    <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </div>
               </div>

@@ -1,12 +1,7 @@
-import { cn } from "@/lib/utils";
-import { formatPYUSD } from "@/lib/currency";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
+
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { formatPYUSD } from "@/lib/currency";
 
 // Define the Community interface
 export interface Community {
@@ -19,7 +14,6 @@ export interface Community {
 
 interface CommunityCardProps {
   community: Community;
-  className?: string;
   onJoinCommunity: (community: Community) => void;
 }
 
@@ -32,47 +26,43 @@ export function CommunityCard({
   };
 
   return (
-    <div
-      className="flex flex-col border rounded-xl overflow-hidden"
+    <Card
+      className="cursor-pointer hover:bg-gray-800 transition-colors bg-gray-900 border-gray-700 overflow-hidden"
       onClick={handleCardClick}
     >
       {community.imageUrl && (
         <img
-          className="aspect-video"
+          className="aspect-video w-full object-cover"
           src={community.imageUrl}
           alt={`${community.name} community`}
         />
       )}
 
       <CardContent className="p-6">
-        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+        <h3 className="text-xl font-semibold text-white mb-2">
           {community.name}
         </h3>
-        <p className="text-zinc-400 text-sm leading-relaxed mb-4">
-          {community.description}
-        </p>
+        <p className="text-gray-400 text-sm mb-4">{community.description}</p>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center text-sm">
-            <span className="text-zinc-500 font-medium">Stake Fee:</span>
-            <span className="ml-2 text-lg font-bold text-green-400">
+            <span className="text-gray-500 font-medium">Stake Fee:</span>
+            <span className="ml-2 text-lg font-semibold text-green-400">
               {formatPYUSD(community.stakeFee)}
             </span>
           </div>
 
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <ArrowRight className="w-5 h-5 text-blue-400" />
-          </div>
+          <ArrowRight className="w-5 h-5 text-blue-400" />
         </div>
       </CardContent>
 
-      <CardFooter className="px-6 pb-6 pt-0">
+      <CardFooter className="pt-0">
         <div className="w-full text-center">
-          <div className="text-sm text-blue-400 font-medium group-hover:text-blue-300 transition-colors">
+          <div className="text-sm text-blue-400 font-medium">
             Click to join community
           </div>
         </div>
       </CardFooter>
-    </div>
+    </Card>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { CommunityCard, Community } from "./CommunityCard";
 import { CommunityDetail } from "./CommunityDetail";
 
@@ -50,6 +51,7 @@ export function CommunityDemo() {
 
   const handleGoToCommunity = () => {
     // In a real app, this would navigate to the actual community page
+    console.log(`Navigating to ${selectedCommunity?.name} community`);
     alert(
       `Welcome to ${selectedCommunity?.name}! This would navigate to the community home page.`
     );
@@ -66,36 +68,24 @@ export function CommunityDemo() {
   }
 
   return (
-    <div className="min-h-screen ">
-      {/* Communities Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {mockCommunities.map((community) => (
-          <CommunityCard
-            key={community.id}
-            community={community}
-            onJoinCommunity={handleJoinCommunity}
-          />
-        ))}
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="text-center mt-16">
-        <div className="inline-block p-8 rounded-2xl bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm">
-          <h3 className="text-2xl font-bold text-white mb-3">Ready to Join?</h3>
-          <p className="text-zinc-400 mb-6">
-            Select a community above to get started on your Web3 journey
+    <div className="min-h-screen py-8">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Communities</h1>
+          <p className="text-gray-400">
+            Choose a community to join and start earning rewards
           </p>
-          <div className="flex justify-center space-x-4">
-            <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
-            <div
-              className="w-3 h-3 rounded-full bg-purple-500 animate-pulse"
-              style={{ animationDelay: "0.2s" }}
-            ></div>
-            <div
-              className="w-3 h-3 rounded-full bg-pink-500 animate-pulse"
-              style={{ animationDelay: "0.4s" }}
-            ></div>
-          </div>
+        </div>
+
+        {/* Communities Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {mockCommunities.map((community) => (
+            <CommunityCard
+              key={community.id}
+              community={community}
+              onJoinCommunity={handleJoinCommunity}
+            />
+          ))}
         </div>
       </div>
     </div>

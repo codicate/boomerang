@@ -1,15 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-
-import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-import { WagmiProvider } from "wagmi";
-import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { createConfig, http } from "wagmi";
+import { WagmiProvider } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
+
+import App from "./App.tsx";
+import "./index.css";
 
 const queryClient = new QueryClient();
 const config = createConfig({
