@@ -1,8 +1,11 @@
 import { useAccount } from "wagmi";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useWalletBalances } from "@/hooks/useWalletBalances";
 import { useUserStats } from "@/hooks/useUserStats";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useContractStats } from "@/hooks/useContractStats";
+import { useSimulateYield } from "@/hooks/useSimulateYield";
 
 export default function ProfilePage() {
   const { address, isConnected } = useAccount();
@@ -13,6 +16,14 @@ export default function ProfilePage() {
     isLoading: isLoadingBalances,
   } = useWalletBalances();
   const { stats, isLoading: isLoadingStats } = useUserStats(userId);
+  const {
+    totalPrincipal,
+    totalYield,
+    totalVotes,
+    isLoading: isLoadingContract,
+    refetchAll,
+  } = useContractStats();
+  const { simulateYield, isLoading: isSimulatingYield } = useSimulateYield();
 
   if (!isConnected) {
     return (
@@ -116,6 +127,77 @@ export default function ProfilePage() {
                   </p>
                 </div>
               )}
+            </div>
+          )}
+        </Card>
+
+        {/* Contract Stats */}
+        <Card className="p-6">
+          <h2 className="text-xl font-semibold mb-4">Contract Statistics</h2>
+
+          {isLoadingContract ? (
+            <div className="flex items-center space-x-3">
+              <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
+              <span className="text-gray-600">Loading contract data...</span>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600">
+                    {totalPrincipal
+                      ? `${parseFloat(totalPrincipal.formatted).toFixed(2)}`
+                      : "0"}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Principal Balance (USDC)
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">
+                    {totalYield
+                      ? `${parseFloat(totalYield.formatted).toFixed(2)}`
+                      : "0"}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Total Yield (USDC)
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-orange-50 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">
+                    {totalVotes}
+                  </div>
+                  <div className="text-sm text-gray-600">Total Votes</div>
+                </div>
+              </div>
+
+              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-yellow-800 font-medium">
+                      🧪 <strong>Debug:</strong> Generate fake yield for testing
+                    </p>
+                    <p className="text-xs text-yellow-700 mt-1">
+                      Only works if you're the contract owner
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      simulateYield("1");
+                      // Refresh stats after a delay to show updated values
+                      setTimeout(() => refetchAll(), 3000);
+                    }}
+                    disabled={isSimulatingYield}
+                    size="sm"
+                    variant="outline"
+                    className="ml-4"
+                  >
+                    {isSimulatingYield
+                      ? "Generating..."
+                      : "Generate 1 USDC Yield"}
+                  </Button>
+                </div>
+              </div>
             </div>
           )}
         </Card>
