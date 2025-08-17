@@ -104,7 +104,6 @@ export function useCommunityStaking(stakeFee: number) {
   // Handle transaction status changes
   useEffect(() => {
     if (isApprovalConfirming) {
-      toast.loading("Waiting for USDC approval confirmation...");
     }
   }, [isApprovalConfirming]);
 
@@ -119,7 +118,6 @@ export function useCommunityStaking(stakeFee: number) {
 
   useEffect(() => {
     if (isStakeConfirming) {
-      toast.loading("Waiting for stake confirmation...");
     }
   }, [isStakeConfirming]);
 
