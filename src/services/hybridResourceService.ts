@@ -3,7 +3,7 @@ import { ResourceService } from "./resourceService";
 
 // Simplified hybrid service - blockchain first, then database
 export class HybridResourceService {
-  // Add resource: Contract -> Database
+  // Add resource: Contract call only (database save happens after confirmation)
   static async addResource(
     resource: NewResourceInput,
     userId?: string,
@@ -18,14 +18,30 @@ export class HybridResourceService {
         if (!contractResult.success) {
           return { success: false, error: "Blockchain transaction failed" };
         }
+        // Return success - database save will happen after confirmation
+        return { success: true };
       }
 
-      // Step 2: Save to database
+      // Fallback: Save to database only if no contract call
       const dbResult = await ResourceService.addResource(resource, userId);
       return dbResult;
     } catch (error) {
       console.error("Hybrid add resource error:", error);
       return { success: false, error: "Failed to add resource" };
+    }
+  }
+
+  // Save resource to database (called after contract confirmation)
+  static async saveResourceToDatabase(
+    resource: NewResourceInput,
+    userId?: string
+  ) {
+    try {
+      const dbResult = await ResourceService.addResource(resource, userId);
+      return dbResult;
+    } catch (error) {
+      console.error("Database save error:", error);
+      return { success: false, error: "Failed to save to database" };
     }
   }
 

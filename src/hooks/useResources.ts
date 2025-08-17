@@ -1,4 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Resource, NewResourceInput } from "../types/resource";
 import { ResourceService } from "../services/resourceService";
 import { HybridResourceService } from "../services/hybridResourceService";
@@ -9,6 +11,9 @@ export const useResources = (userId?: string) => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pendingResource, setPendingResource] =
+    useState<NewResourceInput | null>(null);
+  const navigate = useNavigate();
 
   const { hasStaked } = useHasStaked();
   const {
@@ -16,6 +21,8 @@ export const useResources = (userId?: string) => {
     rateResourceOnContract,
     isAddingResource,
     isRatingResource,
+    isAddResourceConfirmed,
+    isRateResourceConfirmed,
   } = useResourceContract();
 
   // Load resources on mount and when userId changes
@@ -35,6 +42,38 @@ export const useResources = (userId?: string) => {
     loadResources();
   }, [loadResources]);
 
+  // Handle saving to database after contract confirmation
+  useEffect(() => {
+    if (isAddResourceConfirmed && pendingResource && userId) {
+      const saveToDatabase = async () => {
+        try {
+          const dbResult = await HybridResourceService.saveResourceToDatabase(
+            pendingResource,
+            userId
+          );
+          if (dbResult.success && dbResult.data) {
+            setResources((prev) => [dbResult.data!, ...prev]);
+            toast.success("Resource added to blockchain! 🎉");
+            setPendingResource(null);
+            navigate("/resource");
+          }
+        } catch (error) {
+          console.error("Failed to save to database:", error);
+          toast.error(
+            "Resource added to blockchain but failed to save locally"
+          );
+        }
+      };
+      saveToDatabase();
+    }
+  }, [isAddResourceConfirmed, pendingResource, userId, navigate]);
+
+  useEffect(() => {
+    if (isRateResourceConfirmed) {
+      toast.success("Vote recorded on blockchain! 🎉");
+    }
+  }, [isRateResourceConfirmed]);
+
   const addResource = useCallback(
     async (
       newResource: NewResourceInput
@@ -50,6 +89,11 @@ export const useResources = (userId?: string) => {
       setIsSubmitting(true);
 
       try {
+        // Store pending resource for database save after contract confirmation
+        if (hasStaked) {
+          setPendingResource(newResource);
+        }
+
         const result = await HybridResourceService.addResource(
           newResource,
           userId,
@@ -57,6 +101,7 @@ export const useResources = (userId?: string) => {
         );
 
         if (result.success && result.data) {
+          // Only add to resources if saved to database (fallback case)
           setResources((prev) => [result.data!, ...prev]);
         }
 

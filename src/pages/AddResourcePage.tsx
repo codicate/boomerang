@@ -16,7 +16,7 @@ export default function AddResourcePage() {
     const result = await addResource(resource);
     if (result.success) {
       toast.success("Resource shared successfully! 🎉");
-      navigate("/resource");
+      // Navigation will be handled automatically after contract confirmation
     }
     return result;
   };
