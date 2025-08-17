@@ -10,6 +10,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { CommunityDemo } from "./components/CommunityDemo";
 import ResourcePage from "./pages/ResourcePage";
+import AddResourcePage from "./pages/AddResourcePage";
 import ProfilePage from "./pages/ProfilePage";
 
 function BottomNavigation() {
@@ -20,6 +21,11 @@ function BottomNavigation() {
     { path: "/resource", label: "Resource", icon: "📚" },
     { path: "/profile", label: "Profile", icon: "👤" },
   ];
+
+  // Hide bottom navigation on add resource page
+  if (location.pathname === "/resource/add") {
+    return null;
+  }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 px-4 py-2 z-50">
@@ -44,32 +50,44 @@ function BottomNavigation() {
 }
 
 function App() {
+  const location = useLocation();
+  const isAddResourcePage = location.pathname === "/resource/add";
+
   return (
-    <Router>
-      <div className="min-h-screen bg-black pb-20">
-        {/* Top header with wallet connection */}
+    <div className="min-h-screen bg-black pb-20">
+      {/* Top header with wallet connection - hide on add resource page */}
+      {!isAddResourcePage && (
         <div className="sticky top-0 bg-black border-b border-gray-800 p-4 z-40">
           <div className="flex justify-end">
             <DynamicWidget />
           </div>
         </div>
+      )}
 
-        {/* Main content */}
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<CommunityDemo />} />
-            <Route path="/resource" element={<ResourcePage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-        </div>
-
-        {/* Bottom navigation */}
-        <BottomNavigation />
-
-        <Toaster />
+      {/* Main content */}
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<CommunityDemo />} />
+          <Route path="/resource" element={<ResourcePage />} />
+          <Route path="/resource/add" element={<AddResourcePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
       </div>
+
+      {/* Bottom navigation */}
+      <BottomNavigation />
+
+      <Toaster />
+    </div>
+  );
+}
+
+function AppWrapper() {
+  return (
+    <Router>
+      <App />
     </Router>
   );
 }
 
-export default App;
+export default AppWrapper;

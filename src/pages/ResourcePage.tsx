@@ -1,11 +1,13 @@
 import { toast } from "sonner";
 import { useResources } from "../hooks/useResources";
-import { AddResourceForm } from "../components/AddResourceForm";
 import { ResourceList } from "../components/ResourceList";
+import { Button } from "../components/ui/button";
+import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function ResourcePage() {
-  const { resources, addResource, upvoteResource, isSubmitting } =
-    useResources();
+  const { resources, upvoteResource } = useResources();
+  const navigate = useNavigate();
 
   const handleTip = (_resourceId: string) => {
     // Placeholder for tipping functionality
@@ -24,15 +26,21 @@ export default function ResourcePage() {
           </p>
         </div>
 
-        {/* Add Resource Form */}
-        <AddResourceForm onSubmit={addResource} isSubmitting={isSubmitting} />
-
         {/* Resource List */}
         <ResourceList
           resources={resources}
           onUpvote={upvoteResource}
           onTip={handleTip}
         />
+
+        {/* Floating Action Button */}
+        <Button
+          onClick={() => navigate("/resource/add")}
+          className="fixed bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-200 z-40"
+          size="lg"
+        >
+          <Plus className="w-6 h-6" />
+        </Button>
       </div>
     </div>
   );

@@ -84,11 +84,7 @@ export const AddResourceForm = ({
   };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-      <h2 className="text-xl font-semibold text-white mb-4">
-        Share a Resource
-      </h2>
-
+    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title Input */}
         <div>
