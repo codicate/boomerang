@@ -2,7 +2,7 @@ import { network } from "hardhat";
 import fs from "fs";
 import path from "path";
 
-const { ethers } = await network.connect("sepolia");
+const { ethers } = await network.connect("baseSepolia");
 async function main() {
   const [deployer] = await ethers.getSigners();
   console.log("📋 Deploying contracts with account:", deployer.address);
@@ -15,7 +15,7 @@ async function main() {
     USDC: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
     PYUSD: "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
   };
-  const token_address = tokens.PYUSD;
+  const token_address = tokens.USDC;
 
   try {
     // Deploy boomerang contract

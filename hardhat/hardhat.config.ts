@@ -23,6 +23,12 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
+    baseSepolia: {
+      type: "http",
+      chainType: "op",
+      url: `https://sepolia.base.org`,
+      accounts: [process.env.SEPOLIA_PRIVATE_KEY || ""],
+    },
     sepolia: {
       type: "http",
       chainType: "l1",

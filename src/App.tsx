@@ -15,7 +15,9 @@ function App() {
   return (
     <div className="flex flex-col p-4">
       <DynamicWidget />
-      <CommunityCard community={sampleCommunity} />
+      <div className="mt-8">
+        <CommunityCard community={sampleCommunity} />
+      </div>
       <Toaster />
     </div>
   );
