@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function ResourcePage() {
   const { userId } = useCurrentUser();
-  const { resources, upvoteResource, isLoading } = useResources(userId);
+  const { resources, upvoteResource, isLoading, hasStaked } =
+    useResources(userId);
   const navigate = useNavigate();
 
   const handleTip = (_resourceId: string) => {
@@ -42,13 +43,23 @@ export default function ResourcePage() {
         )}
 
         {/* Floating Action Button */}
-        <Button
-          onClick={() => navigate("/resource/add")}
-          className="fixed bottom-24 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-200 z-40"
-          size="lg"
-        >
-          <Plus className="w-6 h-6" />
-        </Button>
+        {userId && (
+          <Button
+            onClick={() =>
+              hasStaked
+                ? navigate("/resource/add")
+                : toast.error("You must stake before adding resources")
+            }
+            className={`fixed bottom-24 right-6 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-200 z-40 ${
+              hasStaked
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-600 hover:bg-gray-700"
+            }`}
+            size="lg"
+          >
+            <Plus className="w-6 h-6" />
+          </Button>
+        )}
       </div>
     </div>
   );

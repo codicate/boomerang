@@ -1,11 +1,22 @@
 import { useState, useCallback, useEffect } from "react";
 import { Resource, NewResourceInput } from "../types/resource";
 import { ResourceService } from "../services/resourceService";
+import { HybridResourceService } from "../services/hybridResourceService";
+import { useResourceContract } from "./useResourceContract";
+import { useHasStaked } from "./useHasStaked";
 
 export const useResources = (userId?: string) => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { hasStaked } = useHasStaked();
+  const {
+    addResourceToContract,
+    rateResourceOnContract,
+    isAddingResource,
+    isRatingResource,
+  } = useResourceContract();
 
   // Load resources on mount and when userId changes
   const loadResources = useCallback(async () => {
@@ -28,13 +39,24 @@ export const useResources = (userId?: string) => {
     async (
       newResource: NewResourceInput
     ): Promise<{ success: boolean; error?: string }> => {
+      // Check staking requirement
+      if (!hasStaked) {
+        return {
+          success: false,
+          error: "You must stake before adding resources",
+        };
+      }
+
       setIsSubmitting(true);
 
       try {
-        const result = await ResourceService.addResource(newResource, userId);
+        const result = await HybridResourceService.addResource(
+          newResource,
+          userId,
+          hasStaked ? addResourceToContract : undefined
+        );
 
         if (result.success && result.data) {
-          // Add the new resource to the beginning of the list
           setResources((prev) => [result.data!, ...prev]);
         }
 
@@ -48,7 +70,7 @@ export const useResources = (userId?: string) => {
         };
       }
     },
-    [userId]
+    [userId, hasStaked, addResourceToContract]
   );
 
   const upvoteResource = useCallback(
@@ -58,40 +80,54 @@ export const useResources = (userId?: string) => {
         return;
       }
 
+      if (!hasStaked) {
+        console.warn("User must stake before upvoting");
+        return;
+      }
+
       try {
+        // Find the resource to get its URL
+        const resource = resources.find((r) => r.id === resourceId);
+        if (!resource) return;
+
         // Optimistically update UI
         setResources((prev) =>
-          prev.map((resource) => {
-            if (resource.id === resourceId) {
-              const hasUpvoted = resource.hasUserUpvoted;
+          prev.map((r) => {
+            if (r.id === resourceId) {
+              const hasUpvoted = r.hasUserUpvoted;
               return {
-                ...resource,
-                upvotes: hasUpvoted
-                  ? resource.upvotes - 1
-                  : resource.upvotes + 1,
+                ...r,
+                upvotes: hasUpvoted ? r.upvotes - 1 : r.upvotes + 1,
                 hasUserUpvoted: !hasUpvoted,
               };
             }
-            return resource;
+            return r;
           })
         );
 
-        // Make API call
-        const result = await ResourceService.toggleUpvote(resourceId, userId);
-
-        // Update with actual values from server
-        setResources((prev) =>
-          prev.map((resource) => {
-            if (resource.id === resourceId) {
-              return {
-                ...resource,
-                upvotes: result.newUpvoteCount,
-                hasUserUpvoted: result.hasUpvoted,
-              };
-            }
-            return resource;
-          })
+        // Make hybrid call (blockchain + database)
+        const result = await HybridResourceService.upvoteResource(
+          resourceId,
+          resource.url,
+          userId,
+          hasStaked ? rateResourceOnContract : undefined
         );
+
+        if (result.success && "newUpvoteCount" in result) {
+          // Update with actual values from server
+          setResources((prev) =>
+            prev.map((r) => {
+              if (r.id === resourceId) {
+                return {
+                  ...r,
+                  upvotes: result.newUpvoteCount,
+                  hasUserUpvoted: result.hasUpvoted,
+                };
+              }
+              return r;
+            })
+          );
+        }
       } catch (error) {
         console.error("Failed to toggle upvote:", error);
         // Revert optimistic update on error
@@ -112,7 +148,7 @@ export const useResources = (userId?: string) => {
         );
       }
     },
-    [userId]
+    [userId, hasStaked, resources, rateResourceOnContract]
   );
 
   const refreshResources = useCallback(() => {
@@ -125,6 +161,7 @@ export const useResources = (userId?: string) => {
     upvoteResource,
     refreshResources,
     isLoading,
-    isSubmitting,
+    isSubmitting: isSubmitting || isAddingResource || isRatingResource,
+    hasStaked,
   };
 };

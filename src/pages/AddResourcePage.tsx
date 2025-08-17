@@ -9,7 +9,7 @@ import { NewResourceInput } from "../types/resource";
 
 export default function AddResourcePage() {
   const { userId } = useCurrentUser();
-  const { addResource, isSubmitting } = useResources(userId);
+  const { addResource, isSubmitting, hasStaked } = useResources(userId);
   const navigate = useNavigate();
 
   const handleSubmit = async (resource: NewResourceInput) => {
@@ -66,7 +66,24 @@ export default function AddResourcePage() {
           </p>
         </div>
 
-        <AddResourceForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        {!hasStaked ? (
+          <div className="bg-orange-900/50 border border-orange-700 text-orange-200 px-6 py-4 rounded-lg text-center">
+            <p className="mb-4">
+              You must stake before adding resources to the community.
+            </p>
+            <Button
+              onClick={() => navigate("/")}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+            >
+              Go to Community Page to Stake
+            </Button>
+          </div>
+        ) : (
+          <AddResourceForm
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+          />
+        )}
 
         {/* Cancel button at the bottom */}
         <div className="mt-6 text-center">
