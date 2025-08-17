@@ -16,6 +16,7 @@ import { useUserStats } from "@/hooks/useUserStats";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useContractStats } from "@/hooks/useContractStats";
 import { useSimulateYield } from "@/hooks/useSimulateYield";
+import { MetricCard } from "@/components/MetricCard";
 
 export default function ProfilePage() {
   const { address, isConnected } = useAccount();
@@ -166,39 +167,31 @@ export default function ProfilePage() {
               ) : (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-6 bg-gradient-to-br from-blue-600/10 to-blue-600/5 border border-blue-600/20 rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                          <BarChart3 className="w-4 h-4 text-blue-400" />
-                        </div>
-                        <span className="text-gray-300 text-sm font-medium">
-                          Resources Owned
-                        </span>
-                      </div>
-                      <div className="text-3xl font-bold text-white mb-1">
-                        {stats.resourcesOwned}
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        Total resources shared
-                      </p>
-                    </div>
+                    <MetricCard
+                      title="Resources Owned"
+                      value={stats.resourcesOwned}
+                      subtitle="Total resources shared"
+                      icon={BarChart3}
+                      iconBgColor="bg-blue-600/20"
+                      iconTextColor="text-blue-400"
+                      gradientFrom="from-blue-600/10"
+                      gradientTo="to-blue-600/5"
+                      borderColor="border-blue-600/20"
+                      isLoading={isLoadingStats}
+                    />
 
-                    <div className="p-6 bg-gradient-to-br from-green-600/10 to-green-600/5 border border-green-600/20 rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                          <MessageSquare className="w-4 h-4 text-green-400" />
-                        </div>
-                        <span className="text-gray-300 text-sm font-medium">
-                          Total Votes Cast
-                        </span>
-                      </div>
-                      <div className="text-3xl font-bold text-white mb-1">
-                        {stats.totalVotes}
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        Votes across all resources
-                      </p>
-                    </div>
+                    <MetricCard
+                      title="Total Votes Cast"
+                      value={stats.totalVotes}
+                      subtitle="Votes across all resources"
+                      icon={MessageSquare}
+                      iconBgColor="bg-green-600/20"
+                      iconTextColor="text-green-400"
+                      gradientFrom="from-green-600/10"
+                      gradientTo="to-green-600/5"
+                      borderColor="border-green-600/20"
+                      isLoading={isLoadingStats}
+                    />
                   </div>
 
                   {stats.resourcesOwned === 0 && stats.totalVotes === 0 && (
@@ -246,60 +239,52 @@ export default function ProfilePage() {
               ) : (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-6 bg-gradient-to-br from-purple-600/10 to-purple-600/5 border border-purple-600/20 rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                          <Coins className="w-4 h-4 text-purple-400" />
-                        </div>
-                        <span className="text-gray-300 text-sm font-medium">
-                          Principal Balance
-                        </span>
-                      </div>
-                      <div className="text-2xl font-bold text-white mb-1">
-                        {totalPrincipal
+                    <MetricCard
+                      title="Principal Balance"
+                      value={
+                        totalPrincipal
                           ? `${parseFloat(totalPrincipal.formatted).toFixed(2)}`
-                          : "0.00"}
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        USDC staked in contract
-                      </p>
-                    </div>
+                          : "0.00"
+                      }
+                      subtitle="USDC staked in contract"
+                      icon={Coins}
+                      iconBgColor="bg-purple-600/20"
+                      iconTextColor="text-purple-400"
+                      gradientFrom="from-purple-600/10"
+                      gradientTo="to-purple-600/5"
+                      borderColor="border-purple-600/20"
+                      isLoading={isLoadingContract}
+                    />
 
-                    <div className="p-6 bg-gradient-to-br from-green-600/10 to-green-600/5 border border-green-600/20 rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 bg-green-600/20 rounded-lg flex items-center justify-center">
-                          <TrendingUp className="w-4 h-4 text-green-400" />
-                        </div>
-                        <span className="text-gray-300 text-sm font-medium">
-                          Total Yield
-                        </span>
-                      </div>
-                      <div className="text-2xl font-bold text-white mb-1">
-                        {totalYield
+                    <MetricCard
+                      title="Total Yield"
+                      value={
+                        totalYield
                           ? `${parseFloat(totalYield.formatted).toFixed(2)}`
-                          : "0.00"}
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        USDC yield generated
-                      </p>
-                    </div>
+                          : "0.00"
+                      }
+                      subtitle="USDC yield generated"
+                      icon={TrendingUp}
+                      iconBgColor="bg-green-600/20"
+                      iconTextColor="text-green-400"
+                      gradientFrom="from-green-600/10"
+                      gradientTo="to-green-600/5"
+                      borderColor="border-green-600/20"
+                      isLoading={isLoadingContract}
+                    />
 
-                    <div className="p-6 bg-gradient-to-br from-orange-600/10 to-orange-600/5 border border-orange-600/20 rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-8 h-8 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                          <MessageSquare className="w-4 h-4 text-orange-400" />
-                        </div>
-                        <span className="text-gray-300 text-sm font-medium">
-                          Total Votes
-                        </span>
-                      </div>
-                      <div className="text-2xl font-bold text-white mb-1">
-                        {totalVotes}
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        Votes across all resources
-                      </p>
-                    </div>
+                    <MetricCard
+                      title="Total Votes"
+                      value={totalVotes}
+                      subtitle="Votes across all resources"
+                      icon={MessageSquare}
+                      iconBgColor="bg-orange-600/20"
+                      iconTextColor="text-orange-400"
+                      gradientFrom="from-orange-600/10"
+                      gradientTo="to-orange-600/5"
+                      borderColor="border-orange-600/20"
+                      isLoading={isLoadingContract}
+                    />
                   </div>
 
                   <div className="p-4 bg-yellow-600/10 border border-yellow-600/20 rounded-lg">
