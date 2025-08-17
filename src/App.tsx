@@ -74,10 +74,10 @@ function App() {
           <Route path="/resource/add" element={<AddResourcePage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
+        <Toaster mobileOffset={100} />
       </main>
 
       <Footer />
-      <Toaster />
     </div>
   );
 }

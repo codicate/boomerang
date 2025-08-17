@@ -294,6 +294,19 @@ export default function ProfilePage() {
                       borderColor="border-green-600/20"
                       isLoading={isLoadingStats}
                     />
+
+                    <MetricCard
+                      title="Total Payout Claimed"
+                      value={1.2}
+                      subtitle="Total USDC claimed from rewards"
+                      icon={Coins}
+                      iconBgColor="bg-green-600/20"
+                      iconTextColor="text-green-400"
+                      gradientFrom="from-green-600/10"
+                      gradientTo="to-green-600/5"
+                      borderColor="border-green-600/20"
+                      isLoading={isLoadingStats}
+                    />
                   </div>
 
                   {/* Payout Button */}
