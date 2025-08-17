@@ -5,6 +5,7 @@ import { ResourceList } from "../components/ResourceList";
 import { Button } from "../components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ConnectWalletPrompt } from "../components/ui/connect-wallet-prompt";
 
 export default function ResourcePage() {
   const { userId } = useCurrentUser();
@@ -16,6 +17,10 @@ export default function ResourcePage() {
     // Placeholder for tipping functionality
     toast.info("Tipping feature coming soon! 🪙");
   };
+
+  if (!hasStaked) {
+    return <ConnectWalletPrompt variant="community" />;
+  }
 
   return (
     <div className="min-h-full bg-black text-white relative">

@@ -17,6 +17,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useContractStats } from "@/hooks/useContractStats";
 import { useSimulateYield } from "@/hooks/useSimulateYield";
 import { MetricCard } from "@/components/MetricCard";
+import { ConnectWalletPrompt } from "@/components/ui/connect-wallet-prompt";
 
 export default function ProfilePage() {
   const { address, isConnected } = useAccount();
@@ -37,25 +38,7 @@ export default function ProfilePage() {
   const { simulateYield, isLoading: isSimulatingYield } = useSimulateYield();
 
   if (!isConnected) {
-    return (
-      <div className="min-h-full bg-black text-white">
-        <div className="container mx-auto px-4 py-6 max-w-4xl">
-          <h1 className="text-3xl font-bold mb-8">Profile</h1>
-          <Card className="bg-gray-900 border-gray-800 p-8 text-center">
-            <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Wallet className="w-8 h-8 text-gray-400" />
-            </div>
-            <h2 className="text-xl font-semibold text-white mb-3">
-              Connect Your Wallet
-            </h2>
-            <p className="text-gray-400 max-w-md mx-auto">
-              Please connect your wallet to view your profile, balances, and
-              community activity.
-            </p>
-          </Card>
-        </div>
-      </div>
-    );
+    return <ConnectWalletPrompt variant="wallet" />;
   }
 
   return (
