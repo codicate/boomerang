@@ -1,10 +1,11 @@
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useAccount } from "wagmi";
 
 export const useCurrentUser = () => {
-  const { user } = useDynamicContext();
+  const { address, isConnected } = useAccount();
 
   return {
-    userId: user?.userId,
-    user,
+    userId: address, // Now using wallet address as userId
+    user: { address, isConnected },
+    isConnected,
   };
 };

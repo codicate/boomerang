@@ -33,6 +33,11 @@ const getDomainFromUrl = (url: string): string => {
   }
 };
 
+const truncateAddress = (address: string): string => {
+  if (!address) return "";
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+
 export const ResourceCard = ({
   resource,
   onUpvote,
@@ -88,9 +93,21 @@ export const ResourceCard = ({
       </div>
 
       {/* Description */}
-      <p className="text-gray-300 text-sm mb-4 line-clamp-3">
+      <p className="text-gray-300 text-sm mb-3 line-clamp-3">
         {resource.description}
       </p>
+
+      {/* Owner */}
+      {resource.user_id && (
+        <div className="mb-4">
+          <span className="text-xs text-gray-500">
+            Owner:{" "}
+            <span className="font-mono text-gray-400">
+              {truncateAddress(resource.user_id)}
+            </span>
+          </span>
+        </div>
+      )}
 
       {/* Tags */}
       {resource.tags.length > 0 && (
